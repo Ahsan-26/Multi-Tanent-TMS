@@ -2,23 +2,25 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from .serializers import OrganizationSerializer
-from .services import create_organization
-
+from .models import Organization
+from memberships.models import Membership
 
 class OrganizationCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        serializer = OrganizationSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        name = request.data.get("name")
 
-        org = create_organization(
+        org = Organization.objects.create(name=name)
+
+        # AUTO: creator becomes admin
+        Membership.objects.create(
             user=request.user,
-            validated_data=serializer.validated_data
+            organization=org,
+            role="admin"
         )
 
         return Response({
-            "success": True,
-            "data": OrganizationSerializer(org).data
+            "id": org.id,
+            "name": org.name
         })
