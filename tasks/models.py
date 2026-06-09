@@ -1,6 +1,5 @@
 from django.db import models
 from projects.models import Project
-from organizations.models import Organization
 from django.contrib.auth.models import User
 
 
@@ -10,11 +9,6 @@ class Task(models.Model):
         ('todo', 'Todo'),
         ('in_progress', 'In Progress'),
         ('done', 'Done'),
-    )
-
-    organization = models.ForeignKey(
-        Organization,
-        on_delete=models.CASCADE
     )
 
     project = models.ForeignKey(

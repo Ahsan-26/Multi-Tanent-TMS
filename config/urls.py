@@ -11,5 +11,7 @@ urlpatterns = [
     path('api/auth/token/', TokenObtainPairView.as_view()),
     path('api/auth/token/refresh/', TokenRefreshView.as_view()),
     path('api/users/', include('users.urls')),
+
+    path('api/orgs/<int:org_id>/projects/', include('projects.urls')),
 ]
 
